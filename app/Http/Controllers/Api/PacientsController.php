@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Pacients;
 use App\Models\Phones;
+use Exception;
 use Illuminate\Http\Request;
 
 class PacientsController extends Controller
@@ -76,8 +77,7 @@ class PacientsController extends Controller
         return response()->json(['message'=> "Houve um erro ao executar essa funcionalidade."]);
 
        }catch(\Exception $e){
-        dd($e);
-        return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e]);
+        return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e], 500);
        }
 
 
@@ -87,12 +87,25 @@ class PacientsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $document
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($document)
     {
         //
+        try{
+
+            $pacient = Pacients::firstWhere('document', $document);    
+
+            if(!$pacient){
+                return response()->json([
+                    "message"=>"Não encontrei o documento informado $document."
+                ], 400);
+            }
+            return response()->json($pacient);
+        }catch(\Exception $e){
+            return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e], 500); 
+        }
     }
 
     /**
@@ -105,6 +118,24 @@ class PacientsController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        try{
+            $updatePacients = Pacients::find($id);
+            if(!$updatePacients){
+                return response()->json([
+                    "message"=>"Não encontrei o usuário informado."
+                ], 400);
+            }
+            $updatePacients->fill($request->all());
+            $updatePacients->save($request->all());
+
+            return response()->json([
+                "message"=> "Usuário editado com sucesso.",
+                "status" => true
+            ]);
+        }catch(\Exception $e){
+            return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e], 500);
+        }
     }
 
     /**
@@ -115,6 +146,19 @@ class PacientsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            $pacient = Pacients::find($id);
+            if(!$pacient){
+                return response()->json([
+                    "message"=>"Não encontrei o usuário informado."
+                ], 400);
+            }
+            $pacient->delete();
+            return response()->json([
+                "message" => "Usuário excluído com sucesso."
+            ]);
+        }catch(\Exception $e){
+            return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e], 500);
+        }
     }
 }
