@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Phones extends Model
 {
     use HasFactory;
+    protected $fillable =[
+        "owner", "number", "type", "prefixed", "main"
+    ];
+    
+    protected $table = 'phones';
 }

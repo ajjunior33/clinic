@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Address;
 use App\Models\Pacients;
+use App\Models\Phones;
 use Illuminate\Http\Request;
 
 class PacientsController extends Controller
@@ -33,24 +34,50 @@ class PacientsController extends Controller
         //
       
        try{
+           $newPacient = new Pacients();
+           $newAddress = new Address();
+           $newPhone  = new Phones();
         $data = $request->all();
-        $address = $data['main_address'];
-        $address['main_address']['main'] = true;
-        $phones = $data['phones'];
+        $dataPhones = $data['phones'];
+        
+            
+        $dataAddress = $data['main_address'];
+        $dataAddress['main'] = true;
+            
         unset($data['main_address'], $data['phones']);
-        $newPacient = new Pacients();
+
+
         $newPacient->fill($data);
         $newPacient->save();
         $idPacient = $newPacient->id;
+
         if($newPacient){
-            return response()->json(['message' => "Usuário criado com sucesso."]);
+
+            $dataAddress['pacient_id'] = $idPacient;
+            $newAddress->fill($dataAddress);
+            $newAddress->save($dataAddress);
+
+            foreach($dataPhones as $item){
+                $item['pacient_id'] = $idPacient;
+
+                $newPhone->fill($item);
+                $newPhone->save($item);
+            }
+
+
+            return response()->json([
+                'message' => "Paciente cadastrado com sucesso.",
+                "status" => true
+            ]);
+
         }
 
 
         return response()->json(['message'=> "Houve um erro ao executar essa funcionalidade."]);
 
        }catch(\Exception $e){
-           return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e]);
+        dd($e);
+        return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e]);
        }
 
 
