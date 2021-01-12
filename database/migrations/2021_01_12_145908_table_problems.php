@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TableAddress extends Migration
+class TableProblems extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class TableAddress extends Migration
      */
     public function up()
     {
-        Schema::create('address', function (Blueprint $table) {
-            $table->id();
-            $table->string('address',255);
-            $table->string('city', 255);
-            $table->string('neighborhood', 255);
-            $table->string('state', 2);
-            $table->string('zip_code', 30);
-            $table->string('number');
-            $table->boolean('main');
+        Schema::create('problems', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('diagnosis', 255);
+            $table->enum('diagnostic_type', ['entry', 'hospitalization','return','diary','exit']);
+            $table->enum('gravity', ['green', 'yellow', 'red']);
+            $table->longText('problem_description');            
             $table->integer('pacient_id')->unsigned();
             $table->foreign('pacient_id')
                 ->references('id')
@@ -38,6 +35,6 @@ class TableAddress extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('address');
+        Schema::dropIfExists('problems');
     }
 }

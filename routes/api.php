@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UsersController;
+use App\Http\Controllers\Api\PacientsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,8 @@ Route::post('auth/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['apiJwt']], function(){
     Route::get('getLogin', [AuthController::class, 'me']);
     Route::get('users', [UsersController::class ,'index']);
+    Route::post('pacients', [PacientsController::class, 'store']);
+
+
+        // Route::resource('pacients   ', 'Api\\PacientsController');
 });

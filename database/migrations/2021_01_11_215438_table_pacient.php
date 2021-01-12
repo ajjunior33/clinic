@@ -13,15 +13,16 @@ class TablePacient extends Migration
      */
     public function up()
     {
-        Schema::create('pacient', function (Blueprint $table) {
-            $table->id();
+        Schema::create('pacients', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('full_name', 255);
             $table->string('document', 255);
             $table->string('email', 255);
             $table->enum('gender', ['male', 'female']);
-            $table->date('birth');
+            $table->string('birth');
             $table->enum('blood', ['A+','A-','O+','O-','AB+','AB-','B-','B+']);
             $table->longText('allergy');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

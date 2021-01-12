@@ -14,13 +14,17 @@ class AuthController extends Controller
     */
     public function login(Request $request)
     {
+       try{
         $credentials = $request->only(['email', 'password']);
- 
-        if (! $token = auth('api')->attempt($credentials)) {
+
+        if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
- 
+
         return $this->respondWithToken($token);
+       }catch(\Exception $e){
+           dd($e);
+       }
     }
       /**
      * Log the user out (Invalidate the token).
