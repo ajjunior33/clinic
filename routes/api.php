@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\PacientsController;
+use App\Http\Controllers\Api\PhonesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Driver\PcovDriver;
@@ -35,5 +37,19 @@ Route::group(['middleware' => ['apiJwt']], function(){
     Route::post('pacients', [PacientsController::class,'store']);
     Route::delete('pacients/{id}', [ PacientsController::class, 'destroy']);
 
+
+    //Phones
+    Route::get("phones/{idPacient}", [PhonesController::class, 'show']);
+    Route::post("phones", [PhonesController::class, 'store']);
+    Route::put("phones/{idPhone}", [PhonesController::class, 'update']);
+    Route::put('phones/updateMain/{idPacient}/{idNew}', [PhonesController::class , 'updateMain']);
+    Route::delete('phones/{idPhone}', [PhonesController::class, 'destroy']);
+
+    //Address
+    Route::get("address/{idPacient}", [AddressController::class, 'show']);
+    Route::post("address", [AddressController::class, 'store']);
+    Route::put("address", [AddressController::class, 'update']);
+    Route::put('address/updateMain/{idPacient}/{idNew}', [AddressController::class , 'updateMain']);
+    Route::delete('address/id', [AddressController::class, 'destroy']);
 
 });
