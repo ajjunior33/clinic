@@ -50,6 +50,6 @@ Route::group(['middleware' => ['apiJwt']], function(){
     Route::post("address", [AddressController::class, 'store']);
     Route::put("address", [AddressController::class, 'update']);
     Route::put('address/updateMain/{idPacient}/{idNew}', [AddressController::class , 'updateMain']);
-    Route::delete('address/id', [AddressController::class, 'destroy']);
+    Route::delete('address/{idAddress}', [AddressController::class, 'destroy']);
 
 });
