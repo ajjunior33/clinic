@@ -22,6 +22,7 @@ class TablePacient extends Migration
             $table->string('birth');
             $table->enum('blood', ['A+','A-','O+','O-','AB+','AB-','B-','B+']);
             $table->longText('allergy');
+
             $table->softDeletes();
             $table->timestamps();
         });

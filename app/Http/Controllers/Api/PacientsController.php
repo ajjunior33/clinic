@@ -30,58 +30,52 @@ class PacientsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-      
-       try{
+    public function store(Request $request){
+        try{
            $newPacient = new Pacients();
            $newAddress = new Address();
            $newPhone  = new Phones();
-        $data = $request->all();
-        $dataPhones = $data['phones'];
-        
+
+           $data = $request->all();
+
+           $dataPhones = $data['phones'];
+           $dataPhones['main'] = true;
+
+           $dataAddress = $data['main_address'];
+           $dataAddress['main'] = true;
+
+           unset($data['main_address'], $data['phones']);
+           $verifyPacient = Pacients::where("document",$data['document'])->get();
+           if(count($verifyPacient) > 0){
+               return response()->json([
+                   'message' => 'Usuário já cadastrado.',
+                   'status' => false
+               ], 400);
+           }
+
+           $newPacient->fill($data);
+           $newPacient->save();
+           $idPacient = $newPacient->id;
+
+           if($newPacient){
+               $dataAddress['pacient_id'] = $idPacient;
+               $newAddress->fill($dataAddress);
+               $newAddress->save($dataAddress);
             
-        $dataAddress = $data['main_address'];
-        $dataAddress['main'] = true;
-            
-        unset($data['main_address'], $data['phones']);
+               $dataPhones['pacient_id'] = $idPacient;
+               $newPhone->fill($dataPhones);
+               $newPhone->save($dataPhones);
+               
 
-
-        $newPacient->fill($data);
-        $newPacient->save();
-        $idPacient = $newPacient->id;
-
-        if($newPacient){
-
-            $dataAddress['pacient_id'] = $idPacient;
-            $newAddress->fill($dataAddress);
-            $newAddress->save($dataAddress);
-
-            foreach($dataPhones as $item){
-                $item['pacient_id'] = $idPacient;
-
-                $newPhone->fill($item);
-                $newPhone->save($item);
+               return response()->json([
+                   'message' => "Paciente cadastrado com sucesso.",
+                   "status" => true
+                ]);
             }
-
-
-            return response()->json([
-                'message' => "Paciente cadastrado com sucesso.",
-                "status" => true
-            ]);
-
+            return response()->json(['message'=> "Houve um erro ao executar essa funcionalidade."]);
+        }catch(\Exception $e){
+            return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e], 500);
         }
-
-
-        return response()->json(['message'=> "Houve um erro ao executar essa funcionalidade."]);
-
-       }catch(\Exception $e){
-        return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e], 500);
-       }
-
-
-        
     }
 
     /**
@@ -94,15 +88,20 @@ class PacientsController extends Controller
     {
         //
         try{
-
-            $pacient = Pacients::firstWhere('document', $document);    
-
+            $responseDate = [ ];
+            $pacient = Pacients::firstWhere('document', $document);
+            $phones = Phones::where('pacient_id', $pacient->id)->get();
+            $address = Address::where('pacient_id', $pacient->id)->get();
+            $responseDate['pacient'] = $pacient;
+            $responseDate['address'] = $address; 
+            $responseDate['phones'] = $phones;
+           
             if(!$pacient){
                 return response()->json([
                     "message"=>"Não encontrei o documento informado $document."
                 ], 400);
             }
-            return response()->json($pacient);
+            return response()->json($responseDate);
         }catch(\Exception $e){
             return response()->json(['message'=>"Houve um erro ao processar sua requisição", 'e' => $e], 500); 
         }

@@ -33,6 +33,7 @@ Route::group(['middleware' => ['apiJwt']], function(){
     Route::get("pacients", [PacientsController::class, 'index']);
     Route::get("pacients/{document}", [PacientsController::class, 'show']);
     Route::post('pacients', [PacientsController::class,'store']);
+    Route::delete('pacients/{id}', [ PacientsController::class, 'destroy']);
 
 
 });

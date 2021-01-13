@@ -19,7 +19,12 @@ class TablePhones extends Migration
             $table->string('owner', 255);
             $table->string('number', 30);
             $table->string('prefixed',3);
-            $table->boolean('main');
+            $table->boolean('main');            
+            $table->integer('pacient_id')->unsigned();
+            $table->foreign('pacient_id')
+                ->references('id')
+                ->on('pacients')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
