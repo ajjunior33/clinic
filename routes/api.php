@@ -29,9 +29,8 @@ Route::post('auth/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['apiJwt']], function(){
     Route::get('getLogin', [AuthController::class, 'me']);
     Route::get('users', [UsersController::class ,'index']);
-
+    
     //Pacients
-
     Route::get("pacients", [PacientsController::class, 'index']);
     Route::get("pacients/{document}", [PacientsController::class, 'show']);
     Route::post('pacients', [PacientsController::class,'store']);
