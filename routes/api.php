@@ -53,14 +53,14 @@ Route::group(['middleware' => ['apiJwt']], function(){
     Route::put('address/updateMain/{idPacient}/{idNew}', [AddressController::class , 'updateMain']);
     Route::delete('address/{idAddress}', [AddressController::class, 'destroy']);
     
-
+    //Medics
     Route::get("medics", [MedicsController::class, 'index']);
     Route::get("medics/{idMedic}", [MedicsController::class, 'show']);
     Route::post("medics", [MedicsController::class, 'store']);
     Route::put("medics/{idMedic}", [MedicsController::class, 'update']);
     Route::delete("medics/{idMedic}", [MedicsController::class, 'destroy']);
 
-
+    //Diagnostics
     Route::post('diagnostic', [ProblemsController::class, 'store']);
     Route::get('diagnostic/{document}', [ProblemsController::class, 'show']);
     Route::put('diagnostic/{idDiagnostic}', [ProblemsController::class, 'update']);
