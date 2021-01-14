@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MedicsController;
 use App\Http\Controllers\Api\UsersController;
 use App\Http\Controllers\Api\PacientsController;
 use App\Http\Controllers\Api\PhonesController;
+use App\Http\Controllers\Api\ProblemsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Driver\PcovDriver;
@@ -50,5 +52,17 @@ Route::group(['middleware' => ['apiJwt']], function(){
     Route::put("address", [AddressController::class, 'update']);
     Route::put('address/updateMain/{idPacient}/{idNew}', [AddressController::class , 'updateMain']);
     Route::delete('address/{idAddress}', [AddressController::class, 'destroy']);
+    
 
+    Route::get("medics", [MedicsController::class, 'index']);
+    Route::get("medics/{idMedic}", [MedicsController::class, 'show']);
+    Route::post("medics", [MedicsController::class, 'store']);
+    Route::put("medics/{idMedic}", [MedicsController::class, 'update']);
+    Route::delete("medics/{idMedic}", [MedicsController::class, 'destroy']);
+
+
+    Route::post('diagnostic', [ProblemsController::class, 'store']);
+    Route::get('diagnostic/{document}', [ProblemsController::class, 'show']);
+    Route::put('diagnostic/{idDignostic}', [ProblemsController::class, 'update']);
+    Route::delete('diagnostic', [ProblemsController::class, 'destroy']);
 });
