@@ -14,7 +14,7 @@ class TablePhones extends Migration
     public function up()
     {
         Schema::create('phones', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->enum('type',['cell_phone', 'fixed']);
             $table->string('owner', 255);
             $table->string('number', 30);

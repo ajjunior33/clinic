@@ -14,7 +14,7 @@ class TablePacient extends Migration
     public function up()
     {
         Schema::create('pacients', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('full_name', 255);
             $table->string('document', 255);
             $table->string('email', 255);
