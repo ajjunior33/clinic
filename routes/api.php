@@ -63,6 +63,6 @@ Route::group(['middleware' => ['apiJwt']], function(){
 
     Route::post('diagnostic', [ProblemsController::class, 'store']);
     Route::get('diagnostic/{document}', [ProblemsController::class, 'show']);
-    Route::put('diagnostic/{idDignostic}', [ProblemsController::class, 'update']);
+    Route::put('diagnostic/{idDiagnostic}', [ProblemsController::class, 'update']);
     Route::delete('diagnostic', [ProblemsController::class, 'destroy']);
 });

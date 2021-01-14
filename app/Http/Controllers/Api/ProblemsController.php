@@ -69,19 +69,21 @@ class ProblemsController extends Controller
         try{
             
            
-            $getDiagnostic = Pacients::where('document', $document);
+            $getPacients = Pacients::where('document', $document)->first();
             
-            if($getDiagnostic->count() < 1){
+            if($getPacients->count() < 1){
                 return response()->json([
                     "message" => "Documento Informado não encontrado",
                     "status" => false
                 ], 400);
             }
 
+            $getDiagnostics = Problems::where("pacient_id", $getPacients->id);
+
             return response()->json([
                 "message" => "Diagnosticos",
                 "status" => true,
-                "data" => $getDiagnostic
+                "data" => $getDiagnostics->get(['id','diagnostic','diagnostic_type','gravity'])
             ]);
 
         }catch(\Exception $e){
@@ -96,33 +98,12 @@ class ProblemsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $idDiagnostic)
     {
         try{
             $data = $request->all();
-            $getIdMedic =Medics::where('crm', $data['crm_medic']);
-            $getIdPacient = Pacients::where('document', $data['document_pacient']);
-            unset($data['crm_medic'], $data['document_pacient']);
 
-            if($getIdMedic->count() < 1){
-                return response()->json([
-                    "message" => "CRM Informado não encontrado",
-                    "status" => false
-                ],400);
-            }
-            if($getIdPacient->count() < 1){
-                return response()->json([
-                    "message" => "Documento Informado não encontrado",
-                    "status" => false
-                ],400);
-            }
-            $getIdMedic = $getIdMedic->get()[0];
-            $getIdPacient = $getIdPacient->get()[0];
-
-            $data['medic_id'] = $getIdMedic->id;
-            $data['pacient_id'] = $getIdPacient->id;
-
-            $problems = Problems::find($id);
+            $problems = Problems::find($idDiagnostic);
 
             if(!$problems){
                 return response()->json([
@@ -135,7 +116,7 @@ class ProblemsController extends Controller
             $problems->save($data);
 
             return response()->json([
-                "message"=> "Diagnostico registrado com sucesso.",
+                "message"=> "Diagnostico editado com sucesso.",
                 "status"=> true
             ]);
 
