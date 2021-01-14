@@ -14,7 +14,7 @@ class TableMedics extends Migration
     public function up()
     {
         Schema::create('medics', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name', 255);
             $table->string('email', 255);
             $table->string('crm', 30);
