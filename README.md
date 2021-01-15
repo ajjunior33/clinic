@@ -1,3 +1,13 @@
+O sistema está hospedado em um servidor da Digital Ocean
+
+O acesso ssh e através:
+Usuario:noadmin
+Senha:fMri0%DOalii
+
+Foi usado o Nginx para subir o  projeto. Está no sub-dominio http://clinica.whitecode.dev.br(134.122.8.104).
+
+na pasta */var/www/html/dominios/clinic*
+
 ## Env, server e database
 
 **Environment**
@@ -592,7 +602,7 @@ no request
 }
 ```
 
-*{{_.base_url}}/phones/1/1*
+*{{_.base_url}}/phones/1
 
 **Response**
 
